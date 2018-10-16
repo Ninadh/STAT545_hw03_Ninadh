@@ -1,0 +1,74 @@
+---
+title: "hw03_Ninadh"
+author: "Ninadh"
+date: "October 15, 2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(gapminder)
+library(knitr)
+```
+
+```{r}
+gapminder
+```
+
+task 1: maximum and minimum GDP per capita for all continents
+
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  summarise(minimum = min(gdpPercap),
+            maximum = max(gdpPercap))
+```
+
+```{r}
+# figure
+
+gapminder %>%
+  group_by(continent) %>%
+  ggplot(aes(continent, gdpPercap, fill= continent)) + geom_violin()
+```
+
+Task 2: GDP spread within the continents
+
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  summarise(gdpSpread = max(gdpPercap) - min(gdpPercap))
+```
+
+Task 3: Life expectancy changing over time in different continents 
+
+| Grammar Component     | Specification |
+|-----------------------|---------------|
+| __data__              | `gapminder` |
+| __aesthetic mapping__ | 'x' & 'y' |
+| __geometric object__  | point |
+| scale                 | linear |
+| statistical transform | none |
+
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  ggplot(aes(year, lifeExp)) +
+  geom_point(aes(colour = continent)) +
+  geom_smooth(aes(colour = continent))
+```
+
+Life expectancy of Oceania > Europe > Americas > Asia > Africa
+
+Task 4: Continents with the number of people who had life expectancy below the mean life expectancy.
+
+```{r}
+gapminder %>%
+  group_by(year, continent) %>%
+  summarise(mean_lifeExp = mean(lifeExp), 
+            low_lifeExp = sum(lifeExp < mean_lifeExp))
+
+```
+
+
